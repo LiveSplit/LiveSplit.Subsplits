@@ -103,10 +103,10 @@ namespace LiveSplit.UI.Components
             MeasureDeltaLabel = new SimpleLabel();
             Settings = settings;
             ColumnsList = columnsList;
-            TimeFormatter = new RegularSplitTimeFormatter(Settings.SplitTimesAccuracy);
-            DeltaTimeFormatter = new DeltaSplitTimeFormatter(Settings.DeltasAccuracy, Settings.DropDecimals);
-            HeaderTimesFormatter = new RegularSplitTimeFormatter(Settings.HeaderAccuracy);
-            SectionTimerFormatter = new RegularSplitTimeFormatter(Settings.SectionTimerAccuracy);
+            TimeFormatter = new RegularSubsplitTimeFormatter(Settings.SplitTimesAccuracy);
+            DeltaTimeFormatter = new DeltaSubsplitTimeFormatter(Settings.DeltasAccuracy, Settings.DropDecimals);
+            HeaderTimesFormatter = new RegularSubsplitTimeFormatter(Settings.HeaderAccuracy);
+            SectionTimerFormatter = new RegularSubsplitTimeFormatter(Settings.SectionTimerAccuracy);
             MinimumHeight = 25;
             VerticalHeight = 31;
 
@@ -166,23 +166,23 @@ namespace LiveSplit.UI.Components
 
             if (Settings.SplitTimesAccuracy != CurrentAccuracy)
             {
-                TimeFormatter = new RegularSplitTimeFormatter(Settings.SplitTimesAccuracy);
+                TimeFormatter = new RegularSubsplitTimeFormatter(Settings.SplitTimesAccuracy);
                 CurrentAccuracy = Settings.SplitTimesAccuracy;
             }
             if (Settings.DeltasAccuracy != CurrentDeltaAccuracy || Settings.DropDecimals != CurrentDropDecimals)
             {
-                DeltaTimeFormatter = new DeltaSplitTimeFormatter(Settings.DeltasAccuracy, Settings.DropDecimals);
+                DeltaTimeFormatter = new DeltaSubsplitTimeFormatter(Settings.DeltasAccuracy, Settings.DropDecimals);
                 CurrentDeltaAccuracy = Settings.DeltasAccuracy;
                 CurrentDropDecimals = Settings.DropDecimals;
             }
             if (Settings.HeaderAccuracy != CurrentHeaderTimesAccuracy)
             {
-                HeaderTimesFormatter = new RegularSplitTimeFormatter(Settings.HeaderAccuracy);
+                HeaderTimesFormatter = new RegularSubsplitTimeFormatter(Settings.HeaderAccuracy);
                 CurrentHeaderTimesAccuracy = Settings.HeaderAccuracy;
             }
             if (Settings.SectionTimerAccuracy != CurrentSectionTimerAccuracy)
             {
-                SectionTimerFormatter = new RegularSplitTimeFormatter(Settings.SectionTimerAccuracy);
+                SectionTimerFormatter = new RegularSubsplitTimeFormatter(Settings.SectionTimerAccuracy);
                 CurrentSectionTimerAccuracy = Settings.SectionTimerAccuracy;
             }
 
@@ -370,23 +370,23 @@ namespace LiveSplit.UI.Components
 
             if (Settings.SplitTimesAccuracy != CurrentAccuracy)
             {
-                TimeFormatter = new RegularSplitTimeFormatter(Settings.SplitTimesAccuracy);
+                TimeFormatter = new RegularSubsplitTimeFormatter(Settings.SplitTimesAccuracy);
                 CurrentAccuracy = Settings.SplitTimesAccuracy;
             }
             if (Settings.DeltasAccuracy != CurrentDeltaAccuracy || Settings.DropDecimals != CurrentDropDecimals)
             {
-                DeltaTimeFormatter = new DeltaSplitTimeFormatter(Settings.DeltasAccuracy, Settings.DropDecimals);
+                DeltaTimeFormatter = new DeltaSubsplitTimeFormatter(Settings.DeltasAccuracy, Settings.DropDecimals);
                 CurrentDeltaAccuracy = Settings.DeltasAccuracy;
                 CurrentDropDecimals = Settings.DropDecimals;
             }
             if (Settings.HeaderAccuracy != CurrentHeaderTimesAccuracy)
             {
-                HeaderTimesFormatter = new RegularSplitTimeFormatter(Settings.HeaderAccuracy);
+                HeaderTimesFormatter = new RegularSubsplitTimeFormatter(Settings.HeaderAccuracy);
                 CurrentHeaderTimesAccuracy = Settings.HeaderAccuracy;
             }
             if (Settings.SectionTimerAccuracy != CurrentSectionTimerAccuracy)
             {
-                SectionTimerFormatter = new RegularSplitTimeFormatter(Settings.SectionTimerAccuracy);
+                SectionTimerFormatter = new RegularSubsplitTimeFormatter(Settings.SectionTimerAccuracy);
                 CurrentSectionTimerAccuracy = Settings.SectionTimerAccuracy;
             }
             
