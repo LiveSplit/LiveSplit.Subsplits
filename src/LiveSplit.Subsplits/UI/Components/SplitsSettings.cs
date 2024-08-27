@@ -476,7 +476,7 @@ namespace LiveSplit.UI.Components
             rdoSectionTimerAccuracySeconds.Checked = SectionTimerAccuracy == TimeAccuracy.Seconds;
             rdoSectionTimerAccuracyTenths.Checked = SectionTimerAccuracy == TimeAccuracy.Tenths;
             rdoSectionTimerAccuracyHundredths.Checked = SectionTimerAccuracy == TimeAccuracy.Hundredths;
-            rdoSectionTimerAccuracyMilliseconds.Checked= SectionTimerAccuracy == TimeAccuracy.Milliseconds;
+            rdoSectionTimerAccuracyMilliseconds.Checked = SectionTimerAccuracy == TimeAccuracy.Milliseconds;
 
             if (Mode == LayoutMode.Horizontal)
             {
