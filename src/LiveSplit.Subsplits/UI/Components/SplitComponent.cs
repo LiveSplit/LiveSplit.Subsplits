@@ -119,7 +119,7 @@ public class SplitComponent : IComponent
         IsActive = false;
 
         Cache = new GraphicsCache();
-        LabelsList = new List<SimpleLabel>();
+        LabelsList = [];
     }
 
     private void SetMeasureLabels(Graphics g, LiveSplitState state)

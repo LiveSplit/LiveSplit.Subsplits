@@ -61,7 +61,7 @@ public class SplitsComponent : IComponent
         CurrentState = state;
         Settings = new SplitsSettings(state);
         InternalComponent = new ComponentRendererComponent();
-        ShadowImages = new Dictionary<Image, Image>();
+        ShadowImages = [];
         visualSplitCount = Settings.VisualSplitCount;
         Settings.SplitLayoutChanged += Settings_SplitLayoutChanged;
         ScrollOffset = 0;
@@ -96,8 +96,8 @@ public class SplitsComponent : IComponent
 
     private void RebuildVisualSplits()
     {
-        Components = new List<IComponent>();
-        SplitComponents = new List<SplitComponent>();
+        Components = [];
+        SplitComponents = [];
         InternalComponent.VisibleComponents = Components;
 
         if (Settings.ShowColumnLabels && CurrentState.Layout?.Mode == LayoutMode.Vertical)
@@ -284,7 +284,7 @@ public class SplitsComponent : IComponent
 
         public void UpdateSplits(IRun splits)
         {
-            Sections = new List<Section>();
+            Sections = [];
             for (int splitIndex = splits.Count() - 1; splitIndex >= 0; splitIndex--)
             {
                 int sectionIndex = splitIndex;
@@ -466,7 +466,7 @@ public class SplitsComponent : IComponent
         int bottomSplit = currentSplit + 1;
         var majorSplitsToAdd = (!Settings.ShowSubsplits && !Settings.HideSubsplits) ? Math.Min(currentSection, Settings.MinimumMajorSplits) : 0;
 
-        List<int> visibleSplits = new List<int>();
+        List<int> visibleSplits = [];
         if ((currentSplit < state.Run.Count() - 1) && (freeSplits > 0) && (!Settings.HideSubsplits || sectionList.isMajorSplit(currentSplit)))
         {
             visibleSplits.Add(currentSplit);
