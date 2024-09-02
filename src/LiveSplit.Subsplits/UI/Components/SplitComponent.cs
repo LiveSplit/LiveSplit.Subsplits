@@ -20,7 +20,7 @@ public class SplitComponent : IComponent
     public bool CollapsedSplit { get; set; }
     public bool oddSplit { get; set; }
 
-    private bool Indent { get { return Settings.IndentSubsplits && (IsSubsplit || ForceIndent); } }
+    private bool Indent => Settings.IndentSubsplits && (IsSubsplit || ForceIndent);
 
     public ISegment Split { get; set; }
     protected bool blankOut = false;
@@ -576,25 +576,13 @@ public class SplitComponent : IComponent
         throw new NotSupportedException();
     }
 
-    public string UpdateName
-    {
-        get { throw new NotSupportedException(); }
-    }
+    public string UpdateName => throw new NotSupportedException();
 
-    public string XMLURL
-    {
-        get { throw new NotSupportedException(); }
-    }
+    public string XMLURL => throw new NotSupportedException();
 
-    public string UpdateURL
-    {
-        get { throw new NotSupportedException(); }
-    }
+    public string UpdateURL => throw new NotSupportedException();
 
-    public Version Version
-    {
-        get { throw new NotSupportedException(); }
-    }
+    public Version Version => throw new NotSupportedException();
 
     private TimeSpan? getSectionTime(LiveSplitState state, int splitNumber, int topNumber, string comparison, TimingMethod method)
     {

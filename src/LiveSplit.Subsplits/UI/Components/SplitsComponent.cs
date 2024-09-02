@@ -41,7 +41,7 @@ public class SplitsComponent : IComponent
     protected LayoutMode OldLayoutMode { get; set; }
     protected Color OldShadowsColor { get; set; }
 
-    protected IEnumerable<ColumnData> ColumnsList { get { return Settings.ColumnsList.Select(x => x.Data); } }
+    protected IEnumerable<ColumnData> ColumnsList => Settings.ColumnsList.Select(x => x.Data);
 
     public string ComponentName
       => "Subsplits";
@@ -603,5 +603,8 @@ public class SplitsComponent : IComponent
         CurrentState.RunManuallyModified -= state_RunManuallyModified;
     }
 
-    public int GetSettingsHashCode() => Settings.GetSettingsHashCode();
+    public int GetSettingsHashCode()
+    {
+        return Settings.GetSettingsHashCode();
+    }
 }

@@ -16,7 +16,7 @@ public partial class SplitsSettings : UserControl
     private int _VisualSplitCount { get; set; }
     public int VisualSplitCount
     {
-        get { return _VisualSplitCount; }
+        get => _VisualSplitCount;
         set
         {
             _VisualSplitCount = value;
@@ -36,7 +36,7 @@ public partial class SplitsSettings : UserControl
     public int MinimumMajorSplits { get; set; }
     public float SplitWidth { get; set; }
     public float SplitHeight { get; set; }
-    public float ScaledSplitHeight { get { return SplitHeight * 10f; } set { SplitHeight = value / 10f; } }
+    public float ScaledSplitHeight { get => SplitHeight * 10f; set => SplitHeight = value / 10f; }
     public float IconSize { get; set; }
 
     public bool Display2Rows { get; set; }
@@ -47,8 +47,8 @@ public partial class SplitsSettings : UserControl
     public ExtendedGradientType BackgroundGradient { get; set; }
     public string GradientString
     {
-        get { return BackgroundGradient.ToString(); }
-        set { BackgroundGradient = (ExtendedGradientType)Enum.Parse(typeof(ExtendedGradientType), value); }
+        get => BackgroundGradient.ToString();
+        set => BackgroundGradient = (ExtendedGradientType)Enum.Parse(typeof(ExtendedGradientType), value);
     }
 
     public string HeaderComparison { get; set; }
@@ -73,8 +73,8 @@ public partial class SplitsSettings : UserControl
     public GradientType SubsplitGradient { get; set; }
     public string SubsplitGradientString
     {
-        get { return SubsplitGradient.ToString(); }
-        set { SubsplitGradient = (GradientType)Enum.Parse(typeof(GradientType), value); }
+        get => SubsplitGradient.ToString();
+        set => SubsplitGradient = (GradientType)Enum.Parse(typeof(GradientType), value);
     }
 
     public bool ShowHeader { get; set; }
@@ -86,8 +86,8 @@ public partial class SplitsSettings : UserControl
     public GradientType HeaderGradient { get; set; }
     public string HeaderGradientString
     {
-        get { return HeaderGradient.ToString(); }
-        set { HeaderGradient = (GradientType)Enum.Parse(typeof(GradientType), value); }
+        get => HeaderGradient.ToString();
+        set => HeaderGradient = (GradientType)Enum.Parse(typeof(GradientType), value);
     }
     public bool OverrideHeaderColor { get; set; }
     public Color HeaderTextColor { get; set; }
@@ -122,8 +122,8 @@ public partial class SplitsSettings : UserControl
     public GradientType CurrentSplitGradient { get; set; }
     public string SplitGradientString
     {
-        get { return CurrentSplitGradient.ToString(); }
-        set { CurrentSplitGradient = (GradientType)Enum.Parse(typeof(GradientType), value); }
+        get => CurrentSplitGradient.ToString();
+        set => CurrentSplitGradient = (GradientType)Enum.Parse(typeof(GradientType), value);
     }
 
     public event EventHandler SplitLayoutChanged;
