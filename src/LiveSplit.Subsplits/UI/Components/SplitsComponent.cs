@@ -79,7 +79,7 @@ public class SplitsComponent : IComponent
     private void state_ComparisonRenamed(object sender, EventArgs e)
     {
         var args = (RenameEventArgs)e;
-        foreach (var column in ColumnsList)
+        foreach (ColumnData column in ColumnsList)
         {
             if (column.Comparison == args.OldName)
             {
@@ -106,7 +106,7 @@ public class SplitsComponent : IComponent
             Components.Add(new SeparatorComponent());
         }
 
-        for (var i = 0; i < visualSplitCount; ++i)
+        for (int i = 0; i < visualSplitCount; ++i)
         {
             if (i == visualSplitCount - 1 && i > 0)
             {
@@ -163,7 +163,7 @@ public class SplitsComponent : IComponent
             ShadowImages.Clear();
         }
 
-        foreach (var split in state.Run)
+        foreach (ISegment split in state.Run)
         {
             if (split.Icon != null && (!ShadowImages.ContainsKey(split.Icon) || OldShadowsColor != state.LayoutSettings.ShadowsColor))
             {
@@ -171,12 +171,12 @@ public class SplitsComponent : IComponent
             }
         }
 
-        var iconsNotBlank = state.Run.Count(x => x.Icon != null) > 0;
+        bool iconsNotBlank = state.Run.Count(x => x.Icon != null) > 0;
 
-        foreach (var split in SplitComponents)
+        foreach (SplitComponent split in SplitComponents)
         {
-            var hideIconSectionSplit = !Settings.ShowIconSectionSplit && split.Split != null && state.Run.IndexOf(split.Split) == lastSplitOfSection;
-            var shouldIndent = split.Split == null || split.Split.Icon != null || Settings.IndentBlankIcons;
+            bool hideIconSectionSplit = !Settings.ShowIconSectionSplit && split.Split != null && state.Run.IndexOf(split.Split) == lastSplitOfSection;
+            bool shouldIndent = split.Split == null || split.Split.Icon != null || Settings.IndentBlankIcons;
 
             if (split.Header)
             {
@@ -199,11 +199,11 @@ public class SplitsComponent : IComponent
 
         OldShadowsColor = state.LayoutSettings.ShadowsColor;
 
-        foreach (var component in Components)
+        foreach (IComponent component in Components)
         {
             if (component is SeparatorComponent separator)
             {
-                var index = Components.IndexOf(separator);
+                int index = Components.IndexOf(separator);
                 if (state.CurrentPhase is TimerPhase.Running or TimerPhase.Paused)
                 {
                     if (((SplitComponent)Components[index + 1]).Split == state.CurrentSplit)
@@ -218,7 +218,7 @@ public class SplitsComponent : IComponent
             }
             else if (component is ThinSeparatorComponent thinSeparator)
             {
-                var index = Components.IndexOf(thinSeparator);
+                int index = Components.IndexOf(thinSeparator);
                 if (state.CurrentPhase is TimerPhase.Running or TimerPhase.Paused)
                 {
                     if (((SplitComponent)Components[index + 1]).Split == state.CurrentSplit)
@@ -407,10 +407,10 @@ public class SplitsComponent : IComponent
             previousRun = state.Run;
         }
 
-        var runningSectionIndex = Math.Min(Math.Max(state.CurrentSplitIndex, 0), state.Run.Count - 1);
+        int runningSectionIndex = Math.Min(Math.Max(state.CurrentSplitIndex, 0), state.Run.Count - 1);
         ScrollOffset = Math.Min(Math.Max(ScrollOffset, -runningSectionIndex), state.Run.Count - runningSectionIndex - 1);
-        var currentSplit = ScrollOffset + runningSectionIndex;
-        var currentSection = sectionList.getSection(currentSplit);
+        int currentSplit = ScrollOffset + runningSectionIndex;
+        int currentSection = sectionList.getSection(currentSplit);
         runningSectionIndex = sectionList.getSection(runningSectionIndex);
         if (sectionList.Sections[currentSection].getSubsplitCount() > 0)
         {
@@ -462,7 +462,7 @@ public class SplitsComponent : IComponent
         int freeSplits = visualSplitCount - (addLast ? 1 : 0) - (addHeader ? 1 : 0);
         int topSplit = currentSplit - 1;
         int bottomSplit = currentSplit + 1;
-        var majorSplitsToAdd = (!Settings.ShowSubsplits && !Settings.HideSubsplits) ? Math.Min(currentSection, Settings.MinimumMajorSplits) : 0;
+        int majorSplitsToAdd = (!Settings.ShowSubsplits && !Settings.HideSubsplits) ? Math.Min(currentSection, Settings.MinimumMajorSplits) : 0;
 
         List<int> visibleSplits = [];
         if ((currentSplit < state.Run.Count() - 1) && (freeSplits > 0) && (!Settings.HideSubsplits || sectionList.isMajorSplit(currentSplit)))
@@ -494,7 +494,7 @@ public class SplitsComponent : IComponent
 
         while ((topSplit >= 0) && (freeSplits > 0))
         {
-            var isMajor = sectionList.isMajorSplit(topSplit);
+            bool isMajor = sectionList.isMajorSplit(topSplit);
             if (ShouldIncludeSplit(currentSection, topSplit) && (freeSplits > majorSplitsToAdd || sectionList.isMajorSplit(topSplit)))
             {
                 visibleSplits.Insert(0, topSplit);
@@ -527,11 +527,11 @@ public class SplitsComponent : IComponent
             bottomSplit++;
         }
 
-        foreach (var component in Components)
+        foreach (IComponent component in Components)
         {
             if (component is SeparatorComponent separator)
             {
-                var index = Components.IndexOf(separator);
+                int index = Components.IndexOf(separator);
 
                 if (Settings.AlwaysShowLastSplit && Settings.SeparatorLastSplit && index == LastSplitSeparatorIndex)
                 {

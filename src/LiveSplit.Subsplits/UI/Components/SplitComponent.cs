@@ -68,7 +68,7 @@ public class SplitComponent : IComponent
     public IEnumerable<ColumnData> ColumnsList { get; set; }
     public IList<SimpleLabel> LabelsList { get; set; }
 
-    private readonly Regex SubsplitRegex = new Regex(@"^{(.+)}\s*(.+)$", RegexOptions.Compiled);
+    private readonly Regex SubsplitRegex = new(@"^{(.+)}\s*(.+)$", RegexOptions.Compiled);
 
     public float VerticalHeight { get; set; }
 
@@ -180,7 +180,7 @@ public class SplitComponent : IComponent
 
         NameLabel.ShadowColor = state.LayoutSettings.ShadowsColor;
         NameLabel.OutlineColor = state.LayoutSettings.TextOutlineColor;
-        foreach (var label in LabelsList)
+        foreach (SimpleLabel label in LabelsList)
         {
             label.ShadowColor = state.LayoutSettings.ShadowsColor;
             label.OutlineColor = state.LayoutSettings.TextOutlineColor;
@@ -219,7 +219,7 @@ public class SplitComponent : IComponent
                 NameLabel.VerticalAlignment = StringAlignment.Center;
                 NameLabel.Y = 0;
                 NameLabel.Height = height;
-                foreach (var label in LabelsList)
+                foreach (SimpleLabel label in LabelsList)
                 {
                     label.VerticalAlignment = StringAlignment.Center;
                     label.Y = 0;
@@ -231,7 +231,7 @@ public class SplitComponent : IComponent
                 NameLabel.VerticalAlignment = StringAlignment.Near;
                 NameLabel.Y = 0;
                 NameLabel.Height = 50;
-                foreach (var label in LabelsList)
+                foreach (SimpleLabel label in LabelsList)
                 {
                     label.VerticalAlignment = StringAlignment.Far;
                     label.Y = height - 50;
@@ -255,14 +255,14 @@ public class SplitComponent : IComponent
 
             if (IsHighlight)
             {
-                Pen highlightPen = new Pen(Color.White);
+                var highlightPen = new Pen(Color.White);
                 g.DrawRectangle(highlightPen, 0, 0, width - 1, height - 1);
             }
 
-            var icon = Split.Icon;
+            Image icon = Split.Icon;
             if (DisplayIcon && icon != null)
             {
-                var shadow = ShadowImage;
+                Image shadow = ShadowImage;
 
                 if (OldImage != icon)
                 {
@@ -271,19 +271,19 @@ public class SplitComponent : IComponent
                     OldImage = icon;
                 }
 
-                var drawWidth = Settings.IconSize;
-                var drawHeight = Settings.IconSize;
-                var shadowWidth = Settings.IconSize * (5 / 4f);
-                var shadowHeight = Settings.IconSize * (5 / 4f);
+                float drawWidth = Settings.IconSize;
+                float drawHeight = Settings.IconSize;
+                float shadowWidth = Settings.IconSize * (5 / 4f);
+                float shadowHeight = Settings.IconSize * (5 / 4f);
                 if (icon.Width > icon.Height)
                 {
-                    var ratio = icon.Height / (float)icon.Width;
+                    float ratio = icon.Height / (float)icon.Width;
                     drawHeight *= ratio;
                     shadowHeight *= ratio;
                 }
                 else
                 {
-                    var ratio = icon.Width / (float)icon.Height;
+                    float ratio = icon.Width / (float)icon.Height;
                     drawWidth *= ratio;
                     shadowWidth *= ratio;
                 }
@@ -314,13 +314,13 @@ public class SplitComponent : IComponent
 
             if (ColumnsList.Count() == LabelsList.Count)
             {
-                var curX = width - 7;
-                var nameX = width - 7;
-                foreach (var label in LabelsList.Reverse())
+                float curX = width - 7;
+                float nameX = width - 7;
+                foreach (SimpleLabel label in LabelsList.Reverse())
                 {
-                    var column = ColumnsList.ElementAt(LabelsList.IndexOf(label));
+                    ColumnData column = ColumnsList.ElementAt(LabelsList.IndexOf(label));
 
-                    var labelWidth = 0f;
+                    float labelWidth = 0f;
                     if (column.Type is ColumnType.DeltaorSplitTime or ColumnType.SegmentDeltaorSegmentTime)
                     {
                         labelWidth = Math.Max(MeasureDeltaLabel.ActualWidth, MeasureTimeLabel.ActualWidth);
@@ -445,10 +445,10 @@ public class SplitComponent : IComponent
             TimeLabel.Height = 50;
         }
 
-        var icon = Split.Icon;
+        Image icon = Split.Icon;
         if (DisplayIcon && icon != null)
         {
-            var shadow = ShadowImage;
+            Image shadow = ShadowImage;
 
             if (OldImage != icon)
             {
@@ -457,19 +457,19 @@ public class SplitComponent : IComponent
                 OldImage = icon;
             }
 
-            var drawWidth = Settings.IconSize;
-            var drawHeight = Settings.IconSize;
-            var shadowWidth = Settings.IconSize * (5 / 4f);
-            var shadowHeight = Settings.IconSize * (5 / 4f);
+            float drawWidth = Settings.IconSize;
+            float drawHeight = Settings.IconSize;
+            float shadowWidth = Settings.IconSize * (5 / 4f);
+            float shadowHeight = Settings.IconSize * (5 / 4f);
             if (icon.Width > icon.Height)
             {
-                var ratio = icon.Height / (float)icon.Width;
+                float ratio = icon.Height / (float)icon.Width;
                 drawHeight *= ratio;
                 shadowHeight *= ratio;
             }
             else
             {
-                var ratio = icon.Width / (float)icon.Height;
+                float ratio = icon.Width / (float)icon.Height;
                 drawWidth *= ratio;
                 shadowWidth *= ratio;
             }
@@ -519,10 +519,10 @@ public class SplitComponent : IComponent
         Color originalColor = DeltaLabel.ForeColor;
         if (Settings.SectionTimer && Settings.SectionTimerGradient)
         {
-            var bigFont = state.LayoutSettings.TimerFont;
-            var sizeMultiplier = bigFont.Size / bigFont.FontFamily.GetEmHeight(bigFont.Style);
-            var ascent = sizeMultiplier * bigFont.FontFamily.GetCellAscent(bigFont.Style);
-            var descent = sizeMultiplier * bigFont.FontFamily.GetCellDescent(bigFont.Style);
+            Font bigFont = state.LayoutSettings.TimerFont;
+            float sizeMultiplier = bigFont.Size / bigFont.FontFamily.GetEmHeight(bigFont.Style);
+            float ascent = sizeMultiplier * bigFont.FontFamily.GetCellAscent(bigFont.Style);
+            float descent = sizeMultiplier * bigFont.FontFamily.GetCellDescent(bigFont.Style);
 
             if (state.Run.IndexOf(Split) >= state.CurrentSplitIndex)
             {
@@ -685,7 +685,7 @@ public class SplitComponent : IComponent
     {
         if (Split != null)
         {
-            var previousSplitName = NameLabel.Text;
+            string previousSplitName = NameLabel.Text;
 
             IsActive = (state.CurrentPhase == TimerPhase.Running
                         || state.CurrentPhase == TimerPhase.Paused) &&
@@ -730,17 +730,17 @@ public class SplitComponent : IComponent
                 NameLabel.AlternateText.Clear();
             }
 
-            var splitIndex = state.Run.IndexOf(Split);
+            int splitIndex = state.Run.IndexOf(Split);
 
             if (Header)
             {
-                var comparison = Settings.HeaderComparison == "Current Comparison" ? state.CurrentComparison : Settings.HeaderComparison;
+                string comparison = Settings.HeaderComparison == "Current Comparison" ? state.CurrentComparison : Settings.HeaderComparison;
                 if (!state.Run.Comparisons.Contains(comparison))
                 {
                     comparison = state.CurrentComparison;
                 }
 
-                var timingMethod = state.CurrentTimingMethod;
+                TimingMethod timingMethod = state.CurrentTimingMethod;
                 if (Settings.HeaderTimingMethod == "Real Time")
                 {
                     timingMethod = TimingMethod.RealTime;
@@ -756,7 +756,7 @@ public class SplitComponent : IComponent
                     deltaTime = null;
                 }
 
-                var color = GetSectionColor(state, null, deltaTime);
+                Color? color = GetSectionColor(state, null, deltaTime);
                 if (color == null)
                 {
                     color = Settings.OverrideHeaderColor ? Settings.HeaderTimesColor : state.LayoutSettings.TextColor;
@@ -825,9 +825,9 @@ public class SplitComponent : IComponent
                     }
                 }
 
-                foreach (var label in LabelsList)
+                foreach (SimpleLabel label in LabelsList)
                 {
-                    var column = ColumnsList.ElementAt(LabelsList.IndexOf(label));
+                    ColumnData column = ColumnsList.ElementAt(LabelsList.IndexOf(label));
                     if (CollapsedSplit)
                     {
                         UpdateCollapsedColumn(state, label, column);
@@ -843,13 +843,13 @@ public class SplitComponent : IComponent
 
     protected void UpdateColumn(LiveSplitState state, SimpleLabel label, ColumnData data)
     {
-        var comparison = data.Comparison == "Current Comparison" ? state.CurrentComparison : data.Comparison;
+        string comparison = data.Comparison == "Current Comparison" ? state.CurrentComparison : data.Comparison;
         if (!state.Run.Comparisons.Contains(comparison))
         {
             comparison = state.CurrentComparison;
         }
 
-        var timingMethod = state.CurrentTimingMethod;
+        TimingMethod timingMethod = state.CurrentTimingMethod;
         if (data.TimingMethod == "Real Time")
         {
             timingMethod = TimingMethod.RealTime;
@@ -859,9 +859,9 @@ public class SplitComponent : IComponent
             timingMethod = TimingMethod.GameTime;
         }
 
-        var type = data.Type;
+        ColumnType type = data.Type;
 
-        var splitIndex = state.Run.IndexOf(Split);
+        int splitIndex = state.Run.IndexOf(Split);
         if (splitIndex < state.CurrentSplitIndex)
         {
             if (type is ColumnType.SplitTime or ColumnType.SegmentTime)
@@ -874,15 +874,15 @@ public class SplitComponent : IComponent
                 }
                 else //SegmentTime
                 {
-                    var segmentTime = LiveSplitStateHelper.GetPreviousSegmentTime(state, splitIndex, timingMethod);
+                    TimeSpan? segmentTime = LiveSplitStateHelper.GetPreviousSegmentTime(state, splitIndex, timingMethod);
                     label.Text = TimeFormatter.Format(segmentTime);
                 }
             }
 
             if (type is ColumnType.DeltaorSplitTime or ColumnType.Delta)
             {
-                var deltaTime = Split.SplitTime[timingMethod] - Split.Comparisons[comparison][timingMethod];
-                var color = LiveSplitStateHelper.GetSplitColor(state, deltaTime, splitIndex, true, true, comparison, timingMethod);
+                TimeSpan? deltaTime = Split.SplitTime[timingMethod] - Split.Comparisons[comparison][timingMethod];
+                Color? color = LiveSplitStateHelper.GetSplitColor(state, deltaTime, splitIndex, true, true, comparison, timingMethod);
                 if (color == null)
                 {
                     color = Settings.OverrideTimesColor ? Settings.BeforeTimesColor : state.LayoutSettings.TextColor;
@@ -910,8 +910,8 @@ public class SplitComponent : IComponent
 
             else if (type is ColumnType.SegmentDeltaorSegmentTime or ColumnType.SegmentDelta)
             {
-                var segmentDelta = LiveSplitStateHelper.GetPreviousSegmentDelta(state, splitIndex, comparison, timingMethod);
-                var color = LiveSplitStateHelper.GetSplitColor(state, segmentDelta, splitIndex, false, true, comparison, timingMethod);
+                TimeSpan? segmentDelta = LiveSplitStateHelper.GetPreviousSegmentDelta(state, splitIndex, comparison, timingMethod);
+                Color? color = LiveSplitStateHelper.GetSplitColor(state, segmentDelta, splitIndex, false, true, comparison, timingMethod);
                 if (color == null)
                 {
                     color = Settings.OverrideTimesColor ? Settings.BeforeTimesColor : state.LayoutSettings.TextColor;
@@ -955,10 +955,10 @@ public class SplitComponent : IComponent
                 }
                 else //SegmentTime or SegmentTimeorSegmentDeltaTime
                 {
-                    var previousTime = TimeSpan.Zero;
-                    for (var index = splitIndex - 1; index >= 0; index--)
+                    TimeSpan previousTime = TimeSpan.Zero;
+                    for (int index = splitIndex - 1; index >= 0; index--)
                     {
-                        var comparisonTime = state.Run[index].Comparisons[comparison][timingMethod];
+                        TimeSpan? comparisonTime = state.Run[index].Comparisons[comparison][timingMethod];
                         if (comparisonTime != null)
                         {
                             previousTime = comparisonTime.Value;
@@ -971,8 +971,8 @@ public class SplitComponent : IComponent
             }
 
             //Live Delta
-            var splitDelta = type is ColumnType.DeltaorSplitTime or ColumnType.Delta;
-            var bestDelta = LiveSplitStateHelper.CheckLiveDelta(state, splitDelta, comparison, timingMethod);
+            bool splitDelta = type is ColumnType.DeltaorSplitTime or ColumnType.Delta;
+            TimeSpan? bestDelta = LiveSplitStateHelper.CheckLiveDelta(state, splitDelta, comparison, timingMethod);
             if (bestDelta != null && IsActive &&
                 (type == ColumnType.DeltaorSplitTime || type == ColumnType.Delta || type == ColumnType.SegmentDeltaorSegmentTime || type == ColumnType.SegmentDelta))
             {
@@ -990,9 +990,9 @@ public class SplitComponent : IComponent
     {
         if (state.CurrentPhase is TimerPhase.Running or TimerPhase.Paused)
         {
-            var curSplit = state.Run[splitIndex].Comparisons[comparison][method];
-            var currentTime = state.CurrentTime[method];
-            var segmentDelta = getSectionDelta(state, splitIndex, TopSplit, comparison, method);
+            TimeSpan? curSplit = state.Run[splitIndex].Comparisons[comparison][method];
+            TimeSpan? currentTime = state.CurrentTime[method];
+            TimeSpan? segmentDelta = getSectionDelta(state, splitIndex, TopSplit, comparison, method);
 
             if ((splitDelta && currentTime > curSplit) || segmentDelta > TimeSpan.Zero)
             {
@@ -1010,13 +1010,13 @@ public class SplitComponent : IComponent
 
     protected void UpdateCollapsedColumn(LiveSplitState state, SimpleLabel label, ColumnData data)
     {
-        var comparison = data.Comparison == "Current Comparison" ? state.CurrentComparison : data.Comparison;
+        string comparison = data.Comparison == "Current Comparison" ? state.CurrentComparison : data.Comparison;
         if (!state.Run.Comparisons.Contains(comparison))
         {
             comparison = state.CurrentComparison;
         }
 
-        var timingMethod = state.CurrentTimingMethod;
+        TimingMethod timingMethod = state.CurrentTimingMethod;
         if (data.TimingMethod == "Real Time")
         {
             timingMethod = TimingMethod.RealTime;
@@ -1026,9 +1026,9 @@ public class SplitComponent : IComponent
             timingMethod = TimingMethod.GameTime;
         }
 
-        var type = data.Type;
+        ColumnType type = data.Type;
 
-        var splitIndex = state.Run.IndexOf(Split);
+        int splitIndex = state.Run.IndexOf(Split);
         if (splitIndex < state.CurrentSplitIndex)
         {
             if (type is ColumnType.SplitTime or ColumnType.SegmentTime)
@@ -1041,16 +1041,16 @@ public class SplitComponent : IComponent
                 }
                 else //SegmentTime
                 {
-                    var segmentTime = getSectionTime(state, splitIndex, TopSplit, comparison, timingMethod);
+                    TimeSpan? segmentTime = getSectionTime(state, splitIndex, TopSplit, comparison, timingMethod);
                     label.Text = TimeFormatter.Format(segmentTime);
                 }
             }
 
             if (type is ColumnType.DeltaorSplitTime or ColumnType.Delta)
             {
-                var deltaTime = Split.SplitTime[timingMethod] - Split.Comparisons[comparison][timingMethod];
-                var segmentDelta = getSectionDelta(state, splitIndex, TopSplit, comparison, timingMethod);
-                var color = GetSectionColor(state, deltaTime, segmentDelta);
+                TimeSpan? deltaTime = Split.SplitTime[timingMethod] - Split.Comparisons[comparison][timingMethod];
+                TimeSpan? segmentDelta = getSectionDelta(state, splitIndex, TopSplit, comparison, timingMethod);
+                Color? color = GetSectionColor(state, deltaTime, segmentDelta);
                 if (color == null)
                 {
                     color = Settings.OverrideTimesColor ? Settings.BeforeTimesColor : state.LayoutSettings.TextColor;
@@ -1078,8 +1078,8 @@ public class SplitComponent : IComponent
 
             else if (type is ColumnType.SegmentDeltaorSegmentTime or ColumnType.SegmentDelta)
             {
-                var segmentDelta = getSectionDelta(state, splitIndex, TopSplit, comparison, timingMethod);
-                var color = GetSectionColor(state, null, segmentDelta);
+                TimeSpan? segmentDelta = getSectionDelta(state, splitIndex, TopSplit, comparison, timingMethod);
+                Color? color = GetSectionColor(state, null, segmentDelta);
                 if (color == null)
                 {
                     color = Settings.OverrideTimesColor ? Settings.BeforeTimesColor : state.LayoutSettings.TextColor;
@@ -1095,7 +1095,7 @@ public class SplitComponent : IComponent
                     }
                     else
                     {
-                        var segmentTime = getSectionTime(state, splitIndex, TopSplit, comparison, timingMethod);
+                        TimeSpan? segmentTime = getSectionTime(state, splitIndex, TopSplit, comparison, timingMethod);
                         label.Text = TimeFormatter.Format(segmentTime);
                     }
                 }
@@ -1124,14 +1124,14 @@ public class SplitComponent : IComponent
                 }
                 else //SegmentTime or SegmentTimeorSegmentDeltaTime
                 {
-                    var previousTime = TopSplit > 0 ? state.Run[TopSplit - 1].Comparisons[comparison][timingMethod] : TimeSpan.Zero;
+                    TimeSpan? previousTime = TopSplit > 0 ? state.Run[TopSplit - 1].Comparisons[comparison][timingMethod] : TimeSpan.Zero;
                     label.Text = TimeFormatter.Format(Split.Comparisons[comparison][timingMethod] - previousTime);
                 }
             }
 
             //Live Delta
-            var splitDelta = type is ColumnType.DeltaorSplitTime or ColumnType.Delta;
-            var bestDelta = CheckLiveDeltaCollapsed(state, splitIndex, splitDelta, comparison, timingMethod);
+            bool splitDelta = type is ColumnType.DeltaorSplitTime or ColumnType.Delta;
+            TimeSpan? bestDelta = CheckLiveDeltaCollapsed(state, splitIndex, splitDelta, comparison, timingMethod);
             if (bestDelta != null && IsActive &&
                 (type == ColumnType.DeltaorSplitTime || type == ColumnType.Delta || type == ColumnType.SegmentDeltaorSegmentTime || type == ColumnType.SegmentDelta))
             {
@@ -1147,7 +1147,7 @@ public class SplitComponent : IComponent
 
     protected float CalculateHeaderWidth()
     {
-        var width = 0f;
+        float width = 0f;
 
         if (Settings.SectionTimer || Settings.HeaderTimes)
         {
@@ -1166,9 +1166,9 @@ public class SplitComponent : IComponent
     {
         if (ColumnsList != null)
         {
-            var mixedCount = ColumnsList.Count(x => x.Type is ColumnType.DeltaorSplitTime or ColumnType.SegmentDeltaorSegmentTime);
-            var deltaCount = ColumnsList.Count(x => x.Type is ColumnType.Delta or ColumnType.SegmentDelta);
-            var timeCount = ColumnsList.Count(x => x.Type is ColumnType.SplitTime or ColumnType.SegmentTime);
+            int mixedCount = ColumnsList.Count(x => x.Type is ColumnType.DeltaorSplitTime or ColumnType.SegmentDeltaorSegmentTime);
+            int deltaCount = ColumnsList.Count(x => x.Type is ColumnType.Delta or ColumnType.SegmentDelta);
+            int timeCount = ColumnsList.Count(x => x.Type is ColumnType.SplitTime or ColumnType.SegmentTime);
             return (mixedCount * (Math.Max(MeasureDeltaLabel.ActualWidth, MeasureTimeLabel.ActualWidth) + 5))
                 + (deltaCount * (MeasureDeltaLabel.ActualWidth + 5))
                 + (timeCount * (MeasureTimeLabel.ActualWidth + 5));
@@ -1182,7 +1182,7 @@ public class SplitComponent : IComponent
         if (ColumnsList != null && LabelsList.Count != ColumnsList.Count())
         {
             LabelsList.Clear();
-            foreach (var column in ColumnsList)
+            foreach (ColumnData column in ColumnsList)
             {
                 LabelsList.Add(new SimpleLabel
                 {
@@ -1224,9 +1224,9 @@ public class SplitComponent : IComponent
             Cache["Indent"] = Indent;
             Cache["DisplayIcon"] = DisplayIcon;
             Cache["ColumnsCount"] = ColumnsList.Count();
-            for (var index = 0; index < LabelsList.Count; index++)
+            for (int index = 0; index < LabelsList.Count; index++)
             {
-                var label = LabelsList[index];
+                SimpleLabel label = LabelsList[index];
                 Cache["Columns" + index + "Text"] = label.Text;
                 Cache["Columns" + index + "Color"] = label.ForeColor.ToArgb();
             }
