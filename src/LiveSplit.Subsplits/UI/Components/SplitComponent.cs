@@ -526,8 +526,7 @@ public class SplitComponent : IComponent
 
             if (state.Run.IndexOf(Split) >= state.CurrentSplitIndex)
             {
-                double h, s, v;
-                originalColor.ToHSV(out h, out s, out v);
+                originalColor.ToHSV(out double h, out double s, out double v);
 
                 Color bottomColor = ColorExtensions.FromHSV(h, s, 0.8 * v);
                 Color topColor = ColorExtensions.FromHSV(h, 0.5 * s, Math.Min(1, (1.5 * v) + 0.1));
