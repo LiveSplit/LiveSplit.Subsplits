@@ -696,7 +696,7 @@ public class SplitComponent : IComponent
 
             if (IsSubsplit)
             {
-                NameLabel.Text = Split.Name.Substring(1);
+                NameLabel.Text = Split.Name[1..];
             }
             else
             {
