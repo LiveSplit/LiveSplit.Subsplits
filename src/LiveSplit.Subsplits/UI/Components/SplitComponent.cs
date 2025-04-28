@@ -935,10 +935,16 @@ public class SplitComponent : IComponent
                     label.Text = DeltaTimeFormatter.Format(segmentDelta);
                 }
             }
+
+            else if (type is ColumnType.CustomVariable)
+            {
+                Split.CustomVariableValues.TryGetValue(data.Name, out string text);
+                label.Text = text ?? "";
+            }
         }
         else
         {
-            if (type is ColumnType.SplitTime or ColumnType.SegmentTime or ColumnType.DeltaorSplitTime or ColumnType.SegmentDeltaorSegmentTime)
+            if (type is ColumnType.SplitTime or ColumnType.SegmentTime or ColumnType.DeltaorSplitTime or ColumnType.SegmentDeltaorSegmentTime or ColumnType.CustomVariable)
             {
                 if (IsActive)
                 {
@@ -953,7 +959,7 @@ public class SplitComponent : IComponent
                 {
                     label.Text = TimeFormatter.Format(Split.Comparisons[comparison][timingMethod]);
                 }
-                else //SegmentTime or SegmentTimeorSegmentDeltaTime
+                else if (type is ColumnType.SegmentTime or ColumnType.SegmentDeltaorSegmentTime)
                 {
                     TimeSpan previousTime = TimeSpan.Zero;
                     for (int index = splitIndex - 1; index >= 0; index--)
@@ -982,6 +988,17 @@ public class SplitComponent : IComponent
             else if (type is ColumnType.Delta or ColumnType.SegmentDelta)
             {
                 label.Text = "";
+            }
+            else if (type is ColumnType.CustomVariable)
+            {
+                if (Split == state.CurrentSplit)
+                {
+                    label.Text = state.Run.Metadata.CustomVariableValue(data.Name) ?? "";
+                }
+                else
+                {
+                    label.Text = "";
+                }
             }
         }
     }
