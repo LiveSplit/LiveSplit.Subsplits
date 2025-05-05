@@ -1051,7 +1051,7 @@ public class SplitComponent : IComponent
         int splitIndex = state.Run.IndexOf(Split);
         if (splitIndex < state.CurrentSplitIndex)
         {
-            if (type is ColumnType.SplitTime or ColumnType.SegmentTime)
+            if (type is ColumnType.SplitTime or ColumnType.SegmentTime or ColumnType.CustomVariable)
             {
                 label.ForeColor = Settings.OverrideTimesColor ? Settings.BeforeTimesColor : state.LayoutSettings.TextColor;
 
@@ -1059,10 +1059,15 @@ public class SplitComponent : IComponent
                 {
                     label.Text = TimeFormatter.Format(Split.SplitTime[timingMethod]);
                 }
-                else //SegmentTime
+                else if (type == ColumnType.SegmentTime)
                 {
                     TimeSpan? segmentTime = getSectionTime(state, splitIndex, TopSplit, comparison, timingMethod);
                     label.Text = TimeFormatter.Format(segmentTime);
+                }
+                else if (type == ColumnType.CustomVariable)
+                {
+                    Split.CustomVariableValues.TryGetValue(data.Name, out string text);
+                    label.Text = text ?? "";
                 }
             }
 
@@ -1123,11 +1128,6 @@ public class SplitComponent : IComponent
                 {
                     label.Text = DeltaTimeFormatter.Format(segmentDelta);
                 }
-            }
-            else if (type is ColumnType.CustomVariable)
-            {
-                Split.CustomVariableValues.TryGetValue(data.Name, out string text);
-                label.Text = text ?? "";
             }
         }
         else
