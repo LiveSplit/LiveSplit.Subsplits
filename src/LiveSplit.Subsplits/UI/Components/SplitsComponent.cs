@@ -42,6 +42,7 @@ public class SplitsComponent : IComponent
     protected Color OldShadowsColor { get; set; }
 
     protected IEnumerable<ColumnData> ColumnsList => Settings.ColumnsList.Select(x => x.Data);
+    protected List<float> ColumnWidths { get; set; }
 
     public string ComponentName
       => "Subsplits";
@@ -64,6 +65,7 @@ public class SplitsComponent : IComponent
         ShadowImages = [];
         visualSplitCount = Settings.VisualSplitCount;
         Settings.SplitLayoutChanged += Settings_SplitLayoutChanged;
+        ColumnWidths = Settings.ColumnsList.Select(_ => 0f).ToList();
         ScrollOffset = 0;
         RebuildVisualSplits();
         sectionList = new SectionList();
@@ -102,7 +104,7 @@ public class SplitsComponent : IComponent
 
         if (Settings.ShowColumnLabels && CurrentState.Layout?.Mode == LayoutMode.Vertical)
         {
-            Components.Add(new LabelsComponent(Settings, ColumnsList));
+            Components.Add(new LabelsComponent(Settings, ColumnsList, ColumnWidths));
             Components.Add(new SeparatorComponent());
         }
 
@@ -121,7 +123,7 @@ public class SplitsComponent : IComponent
                 }
             }
 
-            var splitComponent = new SplitComponent(Settings, ColumnsList);
+            var splitComponent = new SplitComponent(Settings, ColumnsList, ColumnWidths);
             Components.Add(splitComponent);
             SplitComponents.Add(splitComponent);
 
