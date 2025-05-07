@@ -27,9 +27,6 @@ public class SplitComponent : IComponent
 
     protected SimpleLabel NameLabel { get; set; }
     protected SimpleLabel TimeLabel { get; set; }
-    protected SimpleLabel MeasureTimeLabel { get; set; }
-    protected SimpleLabel MeasureDeltaLabel { get; set; }
-    protected SimpleLabel MeasureCharLabel { get; set; }
     protected SimpleLabel HeaderMeasureTimeLabel { get; set; }
     protected SimpleLabel HeaderMeasureDeltaLabel { get; set; }
     protected SimpleLabel DeltaLabel { get; set; }
@@ -98,7 +95,6 @@ public class SplitComponent : IComponent
             Y = 3,
             Text = ""
         };
-        MeasureTimeLabel = new SimpleLabel();
         HeaderMeasureTimeLabel = new SimpleLabel();
         DeltaLabel = new SimpleLabel()
         {
@@ -106,9 +102,7 @@ public class SplitComponent : IComponent
             Y = 3,
             Text = ""
         };
-        MeasureDeltaLabel = new SimpleLabel();
         HeaderMeasureDeltaLabel = new SimpleLabel();
-        MeasureCharLabel = new SimpleLabel();
         Settings = settings;
         ColumnsList = columnsList;
         ColumnWidths = columnWidths;
@@ -128,26 +122,14 @@ public class SplitComponent : IComponent
 
     private void SetMeasureLabels(Graphics g, LiveSplitState state)
     {
-        MeasureTimeLabel.Text = TimeFormatter.Format(new TimeSpan(24, 0, 0));
-        MeasureDeltaLabel.Text = DeltaTimeFormatter.Format(new TimeSpan(0, 9, 0, 0));
-        MeasureCharLabel.Text = "W";
         HeaderMeasureTimeLabel.Text = HeaderTimesFormatter.Format(new TimeSpan(24, 0, 0));
         HeaderMeasureDeltaLabel.Text = SectionTimerFormatter.Format(new TimeSpan(0, 9, 0, 0));
 
-        MeasureTimeLabel.Font = state.LayoutSettings.TimesFont;
-        MeasureTimeLabel.IsMonospaced = true;
-        MeasureDeltaLabel.Font = state.LayoutSettings.TimesFont;
-        MeasureDeltaLabel.IsMonospaced = true;
-        MeasureCharLabel.Font = state.LayoutSettings.TimesFont;
-        MeasureCharLabel.IsMonospaced = true;
         HeaderMeasureTimeLabel.Font = state.LayoutSettings.TimesFont;
         HeaderMeasureTimeLabel.IsMonospaced = true;
         HeaderMeasureDeltaLabel.Font = state.LayoutSettings.TimesFont;
         HeaderMeasureDeltaLabel.IsMonospaced = true;
 
-        MeasureTimeLabel.SetActualWidth(g);
-        MeasureDeltaLabel.SetActualWidth(g);
-        MeasureCharLabel.SetActualWidth(g);
         HeaderMeasureTimeLabel.SetActualWidth(g);
         HeaderMeasureDeltaLabel.SetActualWidth(g);
     }
@@ -331,29 +313,7 @@ public class SplitComponent : IComponent
                 float nameX = width - 7;
                 foreach (SimpleLabel label in LabelsList.Reverse())
                 {
-                    int i = LabelsList.IndexOf(label);
-                    ColumnData column = ColumnsList.ElementAt(i);
-
-                    float labelWidth = 0f;
-                    if (column.Type is ColumnType.DeltaorSplitTime or ColumnType.SegmentDeltaorSegmentTime)
-                    {
-                        labelWidth = Math.Max(MeasureDeltaLabel.ActualWidth, MeasureTimeLabel.ActualWidth);
-                    }
-                    else if (column.Type is ColumnType.Delta or ColumnType.SegmentDelta)
-                    {
-                        labelWidth = MeasureDeltaLabel.ActualWidth;
-                    }
-                    else if (column.Type is ColumnType.SplitTime or ColumnType.SegmentTime)
-                    {
-                        labelWidth = MeasureTimeLabel.ActualWidth;
-                    }
-                    else if (column.Type is ColumnType.CustomVariable)
-                    {
-                        labelWidth = MeasureCharLabel.ActualWidth;
-                    }
-
-                    labelWidth = Math.Max(ColumnWidths[i], labelWidth);
-                    ColumnWidths[i] = labelWidth;
+                    float labelWidth = ColumnWidths[LabelsList.IndexOf(label)];
 
                     label.Width = labelWidth + 20;
                     curX -= labelWidth + 5;
@@ -367,7 +327,6 @@ public class SplitComponent : IComponent
                     if (!string.IsNullOrEmpty(label.Text))
                     {
                         nameX = curX + labelWidth + 5 - label.ActualWidth;
-                        ColumnWidths[i] = Math.Max(ColumnWidths[i], label.ActualWidth + 5);
                     }
                 }
 
@@ -1218,44 +1177,9 @@ public class SplitComponent : IComponent
 
     protected float CalculateLabelsWidth()
     {
-        if (ColumnsList != null)
+        if (ColumnWidths != null)
         {
-            while (ColumnWidths.Count < ColumnsList.Count())
-            {
-                ColumnWidths.Add(0f);
-            }
-
-            float totalWidth = 0f;
-
-            for (int i = 0; i < ColumnsList.Count(); i++)
-            {
-                ColumnData column = ColumnsList.ElementAt(i);
-
-                float labelWidth = 0f;
-                if (column.Type is ColumnType.DeltaorSplitTime or ColumnType.SegmentDeltaorSegmentTime)
-                {
-                    labelWidth = Math.Max(MeasureDeltaLabel.ActualWidth, MeasureTimeLabel.ActualWidth);
-                }
-                else if (column.Type is ColumnType.Delta or ColumnType.SegmentDelta)
-                {
-                    labelWidth = MeasureDeltaLabel.ActualWidth;
-                }
-                else if (column.Type is ColumnType.SplitTime or ColumnType.SegmentTime)
-                {
-                    labelWidth = MeasureTimeLabel.ActualWidth;
-                }
-                else if (column.Type is ColumnType.CustomVariable)
-                {
-                    labelWidth = MeasureCharLabel.ActualWidth;
-                }
-
-                labelWidth = Math.Max(ColumnWidths[i], labelWidth);
-                ColumnWidths[i] = labelWidth;
-
-                totalWidth += labelWidth + 5;
-            }
-
-            return totalWidth;
+            return ColumnWidths.Sum() + (5 * ColumnWidths.Count());
         }
 
         return 0f;
@@ -1315,8 +1239,6 @@ public class SplitComponent : IComponent
                 Cache["Columns" + index + "Color"] = label.ForeColor.ToArgb();
             }
 
-            Cache["MeasureTimeActualWidth"] = MeasureTimeLabel.ActualWidth;
-            Cache["MeasureDeltaActualWidth"] = MeasureDeltaLabel.ActualWidth;
             Cache["HeaderMeasureTimeActualWidth"] = HeaderMeasureTimeLabel.ActualWidth;
             Cache["HeaderMeasureDeltaActualWidth"] = HeaderMeasureDeltaLabel.ActualWidth;
             Cache["Header"] = Header;
