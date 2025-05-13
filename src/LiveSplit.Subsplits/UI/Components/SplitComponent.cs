@@ -1237,6 +1237,10 @@ public class SplitComponent : IComponent
                 SimpleLabel label = LabelsList[index];
                 Cache["Columns" + index + "Text"] = label.Text;
                 Cache["Columns" + index + "Color"] = label.ForeColor.ToArgb();
+                if (index < ColumnWidths.Count)
+                {
+                    Cache["Columns" + index + "Width"] = ColumnWidths[index];
+                }
             }
 
             Cache["HeaderMeasureTimeActualWidth"] = HeaderMeasureTimeLabel.ActualWidth;
