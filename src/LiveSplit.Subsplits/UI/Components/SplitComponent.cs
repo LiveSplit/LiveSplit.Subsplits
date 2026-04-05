@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -12,6 +12,7 @@ using LiveSplit.TimeFormatters;
 
 namespace LiveSplit.UI.Components;
 
+[GlobalFontConsumer(GlobalFont.All)]
 public class SplitComponent : IComponent
 {
     public bool Header { get; set; }
