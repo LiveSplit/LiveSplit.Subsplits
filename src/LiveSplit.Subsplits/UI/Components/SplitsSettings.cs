@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 
+using LiveSplit.Localization;
 using LiveSplit.Model;
 using LiveSplit.Model.Comparisons;
 using LiveSplit.TimeFormatters;
@@ -13,6 +14,8 @@ namespace LiveSplit.UI.Components;
 
 public partial class SplitsSettings : UserControl
 {
+    private static string T(string source) => UiLocalizer.Translate(source, LanguageResolver.ResolveCurrentCultureLanguage());
+
     private int _VisualSplitCount { get; set; }
     public int VisualSplitCount
     {
@@ -512,7 +515,7 @@ public partial class SplitsSettings : UserControl
             trkSize.Maximum = 120;
             SplitWidth = Math.Min(Math.Max(trkSize.Minimum, SplitWidth), trkSize.Maximum);
             trkSize.DataBindings.Add("Value", this, "SplitWidth", false, DataSourceUpdateMode.OnPropertyChanged);
-            lblSplitSize.Text = "Split Width:";
+            lblSplitSize.Text = T("Split Width:");
             chkDisplayRows.Enabled = false;
             chkDisplayRows.DataBindings.Clear();
             chkDisplayRows.Checked = true;
@@ -526,7 +529,7 @@ public partial class SplitsSettings : UserControl
             trkSize.Maximum = 250;
             ScaledSplitHeight = Math.Min(Math.Max(trkSize.Minimum, ScaledSplitHeight), trkSize.Maximum);
             trkSize.DataBindings.Add("Value", this, "ScaledSplitHeight", false, DataSourceUpdateMode.OnPropertyChanged);
-            lblSplitSize.Text = "Split Height:";
+            lblSplitSize.Text = T("Split Height:");
             chkDisplayRows.Enabled = true;
             chkDisplayRows.DataBindings.Clear();
             chkDisplayRows.DataBindings.Add("Checked", this, "Display2Rows", false, DataSourceUpdateMode.OnPropertyChanged);
