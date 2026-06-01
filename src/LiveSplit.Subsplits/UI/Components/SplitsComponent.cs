@@ -1,12 +1,11 @@
+﻿using LiveSplit.Model;
+using LiveSplit.TimeFormatters;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
-
-using LiveSplit.Model;
-using LiveSplit.TimeFormatters;
 
 namespace LiveSplit.UI.Components;
 
@@ -88,7 +87,7 @@ public class SplitsComponent : IComponent
         ShadowImages = [];
         visualSplitCount = Settings.VisualSplitCount;
         Settings.SplitLayoutChanged += Settings_SplitLayoutChanged;
-        ColumnWidths = Settings.ColumnsList.Select(_ => (0, 0f, 0f)).ToList();
+        ColumnWidths = [.. Settings.ColumnsList.Select(_ => (0, 0f, 0f))];
         ScrollOffset = 0;
         RebuildVisualSplits();
         sectionList = new SectionList();
@@ -216,23 +215,11 @@ public class SplitsComponent : IComponent
             bool hideIconSectionSplit = !Settings.ShowIconSectionSplit && split.Split != null && state.Run.IndexOf(split.Split) == lastSplitOfSection;
             bool shouldIndent = split.Split == null || split.Split.Icon != null || Settings.IndentBlankIcons;
 
-            if (split.Header)
-            {
-                split.DisplayIcon = Settings.ShowSectionIcon && shouldIndent && iconsNotBlank;
-            }
-            else
-            {
-                split.DisplayIcon = Settings.DisplayIcons && !hideIconSectionSplit && iconsNotBlank && shouldIndent;
-            }
+            split.DisplayIcon = split.Header
+                ? Settings.ShowSectionIcon && shouldIndent && iconsNotBlank
+                : Settings.DisplayIcons && !hideIconSectionSplit && iconsNotBlank && shouldIndent;
 
-            if (split.Split != null && split.Split.Icon != null)
-            {
-                split.ShadowImage = ShadowImages[split.Split.Icon];
-            }
-            else
-            {
-                split.ShadowImage = null;
-            }
+            split.ShadowImage = split.Split?.Icon != null ? ShadowImages[split.Split.Icon] : null;
         }
 
         OldShadowsColor = state.LayoutSettings.ShadowsColor;
@@ -394,14 +381,10 @@ public class SplitsComponent : IComponent
             && Settings.BackgroundColor2.A > 0)))
         {
             var gradientBrush = new LinearGradientBrush(
-                        new PointF(0, 0),
-                        Settings.BackgroundGradient == ExtendedGradientType.Horizontal
-                        ? new PointF(width, 0)
-                        : new PointF(0, height),
-                        Settings.BackgroundColor,
-                        Settings.BackgroundGradient == ExtendedGradientType.Plain
-                        ? Settings.BackgroundColor
-                        : Settings.BackgroundColor2);
+                new PointF(0, 0),
+                Settings.BackgroundGradient == ExtendedGradientType.Horizontal ? new PointF(width, 0) : new PointF(0, height),
+                Settings.BackgroundColor,
+                Settings.BackgroundGradient == ExtendedGradientType.Plain ? Settings.BackgroundColor : Settings.BackgroundColor2);
             g.FillRectangle(gradientBrush, 0, 0, width, height);
         }
     }
@@ -470,14 +453,7 @@ public class SplitsComponent : IComponent
         int currentSplit = ScrollOffset + runningSectionIndex;
         int currentSection = sectionList.getSection(currentSplit);
         runningSectionIndex = sectionList.getSection(runningSectionIndex);
-        if (sectionList.Sections[currentSection].getSubsplitCount() > 0)
-        {
-            lastSplitOfSection = sectionList.Sections[currentSection].endIndex;
-        }
-        else
-        {
-            lastSplitOfSection = -1;
-        }
+        lastSplitOfSection = sectionList.Sections[currentSection].getSubsplitCount() > 0 ? sectionList.Sections[currentSection].endIndex : -1;
 
         if (Settings.HideSubsplits)
         {
@@ -495,23 +471,9 @@ public class SplitsComponent : IComponent
         }
         else
         {
-            if (ScrollOffset != 0)
-            {
-                SplitsSettings.HilightSplit = state.Run[currentSplit];
-            }
-            else
-            {
-                SplitsSettings.HilightSplit = null;
-            }
+            SplitsSettings.HilightSplit = ScrollOffset != 0 ? state.Run[currentSplit] : null;
 
-            if (currentSection == runningSectionIndex)
-            {
-                SplitsSettings.SectionSplit = null;
-            }
-            else
-            {
-                SplitsSettings.SectionSplit = state.Run[sectionList.Sections[runningSectionIndex].endIndex];
-            }
+            SplitsSettings.SectionSplit = currentSection == runningSectionIndex ? null : state.Run[sectionList.Sections[runningSectionIndex].endIndex];
         }
 
         bool addLast = Settings.AlwaysShowLastSplit || currentSplit == state.Run.Count() - 1;
@@ -595,32 +557,18 @@ public class SplitsComponent : IComponent
                 {
                     int lastIndex = state.Run.Count() - 1;
 
-                    if (freeSplits > 0 || (visibleSplits.Any() && (visibleSplits.Last() == lastIndex - 1)))
+                    if (freeSplits > 0 || (visibleSplits.Count > 0 && (visibleSplits[^1] == lastIndex - 1)))
                     {
-                        if (Settings.ShowThinSeparators)
-                        {
-                            separator.DisplayedSize = 1f;
-                        }
-                        else
-                        {
-                            separator.DisplayedSize = 0f;
-                        }
+                        separator.DisplayedSize = Settings.ShowThinSeparators ? 1f : 0f;
 
                         separator.UseSeparatorColor = false;
                     }
                     else
                     {
                         int prevSection = sectionList.getSection(lastIndex) - 1;
-                        if (visibleSplits.Any() && (prevSection <= 0 || visibleSplits.Last() == sectionList.Sections[prevSection].endIndex))
+                        if (visibleSplits.Count > 0 && (prevSection <= 0 || visibleSplits[^1] == sectionList.Sections[prevSection].endIndex))
                         {
-                            if (Settings.ShowThinSeparators)
-                            {
-                                separator.DisplayedSize = 1f;
-                            }
-                            else
-                            {
-                                separator.DisplayedSize = 0f;
-                            }
+                            separator.DisplayedSize = Settings.ShowThinSeparators ? 1f : 0f;
 
                             separator.UseSeparatorColor = false;
                         }
@@ -722,8 +670,8 @@ public class SplitsComponent : IComponent
                 ColumnWidths.Add((0, 0f, 0f));
             }
 
-            TimeSpan longestTime = new TimeSpan(9, 0, 0);
-            TimeSpan longestDelta = new TimeSpan(0, 0, 59, 0);
+            var longestTime = new TimeSpan(9, 0, 0);
+            var longestDelta = new TimeSpan(0, 0, 59, 0);
             foreach (ISegment split in run.Reverse())
             {
                 if (split.SplitTime.RealTime is TimeSpan splitRealTime && longestTime < splitRealTime)
@@ -797,10 +745,14 @@ public class SplitsComponent : IComponent
 
     private bool ShouldIncludeSplit(int currentSection, int split)
     {
-        return (sectionList.isMajorSplit(split)
-                   && (!Settings.CurrentSectionOnly || sectionList.getSection(split) == currentSection)) ||
-               (!sectionList.isMajorSplit(split)
-                   && (Settings.ShowSubsplits || (!Settings.HideSubsplits && sectionList.getSection(split) == currentSection)));
+        if (sectionList.isMajorSplit(split))
+        {
+            return !Settings.CurrentSectionOnly || sectionList.getSection(split) == currentSection;
+        }
+        else
+        {
+            return Settings.ShowSubsplits || (!Settings.HideSubsplits && sectionList.getSection(split) == currentSection);
+        }
     }
 
     public void Dispose()

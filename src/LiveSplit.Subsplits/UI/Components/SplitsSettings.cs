@@ -1,14 +1,13 @@
-﻿using System;
+﻿using LiveSplit.Localization;
+using LiveSplit.Model;
+using LiveSplit.Model.Comparisons;
+using LiveSplit.TimeFormatters;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-
-using LiveSplit.Localization;
-using LiveSplit.Model;
-using LiveSplit.Model.Comparisons;
-using LiveSplit.TimeFormatters;
 
 namespace LiveSplit.UI.Components;
 
@@ -32,8 +31,8 @@ public partial class SplitsSettings : UserControl
             dmnUpcomingSegments.Maximum = max;
         }
     }
-    static public ISegment HilightSplit { get; set; }
-    static public ISegment SectionSplit { get; set; }
+    public static ISegment HilightSplit { get; set; }
+    public static ISegment SectionSplit { get; set; }
 
     public bool AutomaticAbbreviation { get; set; }
     public Color CurrentSplitTopColor { get; set; }
@@ -411,42 +410,20 @@ public partial class SplitsSettings : UserControl
 
     private void UpdateAccuracy()
     {
-        if (rdoSeconds.Checked)
-        {
-            SplitTimesAccuracy = TimeAccuracy.Seconds;
-        }
-        else if (rdoTenths.Checked)
-        {
-            SplitTimesAccuracy = TimeAccuracy.Tenths;
-        }
-        else if (rdoHundredths.Checked)
-        {
-            SplitTimesAccuracy = TimeAccuracy.Hundredths;
-        }
-        else
-        {
-            SplitTimesAccuracy = TimeAccuracy.Milliseconds;
-        }
+        SplitTimesAccuracy =
+            rdoSeconds.Checked ? TimeAccuracy.Seconds
+            : rdoTenths.Checked ? TimeAccuracy.Tenths
+            : rdoHundredths.Checked ? TimeAccuracy.Hundredths
+            : TimeAccuracy.Milliseconds;
     }
 
     private void UpdateDeltaAccuracy()
     {
-        if (rdoDeltaSeconds.Checked)
-        {
-            DeltasAccuracy = TimeAccuracy.Seconds;
-        }
-        else if (rdoDeltaTenths.Checked)
-        {
-            DeltasAccuracy = TimeAccuracy.Tenths;
-        }
-        else if (rdoDeltaHundredths.Checked)
-        {
-            DeltasAccuracy = TimeAccuracy.Hundredths;
-        }
-        else
-        {
-            DeltasAccuracy = TimeAccuracy.Milliseconds;
-        }
+        DeltasAccuracy =
+            rdoDeltaSeconds.Checked ? TimeAccuracy.Seconds
+            : rdoDeltaTenths.Checked ? TimeAccuracy.Tenths
+            : rdoDeltaHundredths.Checked ? TimeAccuracy.Hundredths
+            : TimeAccuracy.Milliseconds;
     }
 
     private void chkLastSplit_CheckedChanged(object sender, EventArgs e)
@@ -812,22 +789,11 @@ public partial class SplitsSettings : UserControl
 
     private void UpdateHeaderAccuracy()
     {
-        if (rdoHeaderAccuracySeconds.Checked)
-        {
-            HeaderAccuracy = TimeAccuracy.Seconds;
-        }
-        else if (rdoHeaderAccuracyTenths.Checked)
-        {
-            HeaderAccuracy = TimeAccuracy.Tenths;
-        }
-        else if (rdoHeaderAccuracyHundredths.Checked)
-        {
-            HeaderAccuracy = TimeAccuracy.Hundredths;
-        }
-        else
-        {
-            HeaderAccuracy = TimeAccuracy.Milliseconds;
-        }
+        HeaderAccuracy =
+            rdoHeaderAccuracySeconds.Checked ? TimeAccuracy.Seconds
+            : rdoHeaderAccuracyTenths.Checked ? TimeAccuracy.Tenths
+            : rdoHeaderAccuracyHundredths.Checked ? TimeAccuracy.Hundredths
+            : TimeAccuracy.Milliseconds;
     }
 
     private void rdoHeaderAccuracySeconds_CheckedChanged(object sender, EventArgs e)
@@ -852,22 +818,11 @@ public partial class SplitsSettings : UserControl
 
     private void UpdateSectionTimerAccuracy()
     {
-        if (rdoSectionTimerAccuracySeconds.Checked)
-        {
-            SectionTimerAccuracy = TimeAccuracy.Seconds;
-        }
-        else if (rdoSectionTimerAccuracyTenths.Checked)
-        {
-            SectionTimerAccuracy = TimeAccuracy.Tenths;
-        }
-        else if (rdoSectionTimerAccuracyHundredths.Checked)
-        {
-            SectionTimerAccuracy = TimeAccuracy.Hundredths;
-        }
-        else
-        {
-            SectionTimerAccuracy = TimeAccuracy.Milliseconds;
-        }
+        SectionTimerAccuracy = rdoSectionTimerAccuracySeconds.Checked
+            ? TimeAccuracy.Seconds
+            : rdoSectionTimerAccuracyTenths.Checked
+                ? TimeAccuracy.Tenths
+                : rdoSectionTimerAccuracyHundredths.Checked ? TimeAccuracy.Hundredths : TimeAccuracy.Milliseconds;
     }
 
     private void rdoSectionTimerAccuracySeconds_CheckedChanged(object sender, EventArgs e)
@@ -956,7 +911,7 @@ public partial class SplitsSettings : UserControl
         ResetColumns();
         if (ColumnsList.Count > 0)
         {
-            ColumnsList.Last().SelectControl();
+            ColumnsList[^1].SelectControl();
         }
         else
         {
